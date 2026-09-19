@@ -10,7 +10,7 @@ pre-commit:
             glob:
               - "*.{ts,d.ts}"
               - "*.{json,jsonc,json5}"
-              - "*.{md,yaml}"
+              - "*.{md,yml,yaml}"
             stage_fixed: true
 
           - name: Lint TypeScript files applying safe fixes with Oxlint

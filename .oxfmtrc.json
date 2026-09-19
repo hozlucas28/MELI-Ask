@@ -23,7 +23,7 @@
 
     "overrides": [
         {
-            "files": ["*.md", "*.yaml"],
+            "files": ["*.md", "*.yml", "*.yaml"],
             "options": {
                 "tabWidth": 2
             }
