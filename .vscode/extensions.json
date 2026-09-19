@@ -1,3 +1,11 @@
 {
-    "recommendations": ["editorconfig.editorconfig", "oxc.oxc-vscode"]
+    "recommendations": [
+        "editorconfig.editorconfig",
+        "oxc.oxc-vscode",
+        "arahata.linter-actionlint",
+        "zizmor.zizmor-vscode",
+        "redhat.vscode-yaml",
+        "streetsidesoftware.code-spell-checker",
+        "github.vscode-github-actions"
+    ]
 }
