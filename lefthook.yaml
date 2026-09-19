@@ -1,0 +1,34 @@
+assert_lefthook_installed: true
+
+pre-commit:
+  jobs:
+    - name: Format and lint files
+      group:
+        jobs:
+          - name: Format with Oxfmt
+            run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
+            glob:
+              - "*.{ts,d.ts}"
+              - "*.{json,jsonc,json5}"
+              - "*.{md,yaml}"
+            stage_fixed: true
+
+          - name: Lint TypeScript files applying safe fixes with Oxlint
+            run: pnpm exec oxlint --fix {staged_files}
+            glob: "*.ts"
+            stage_fixed: true
+
+    - name: Lint Dependabot configuration file and GitHub Actions workflows
+      group:
+        jobs:
+          - name: With Zizmor
+            run: zizmor --gh-token=$(gh auth token) --persona=auditor --color=never {staged_files}
+          - name: With ActionLint
+            run: pnpm exec github-actionlint -ignore 'unexpected key "description" for "workflow" section.' -no-color {staged_files}
+        parallel: true
+      glob:
+        - .github/dependabot.yaml
+        - .github/workflows/*.yaml
+
+    - name: Check spelling
+      run: pnpm exec cspell {staged_files} --no-color --no-must-find-files
