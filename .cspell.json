@@ -1,9 +1,21 @@
 {
     "version": "0.2",
     "useGitignore": true,
-    "language": "es,en",
-    "words": ["actionlint", "github", "lefthook", "zizmor"],
     "import": ["@cspell/dict-es-es/cspell-ext.json"],
+    "language": "es,en",
+    "words": ["actionlint", "zizmor"],
+    "dictionaries": [
+        "bash",
+        "docker",
+        "lorem-ipsum",
+        "networking-terms",
+        "node",
+        "npm",
+        "shellscript",
+        "software-terms-alternative",
+        "sql",
+        "typescript"
+    ],
     "ignorePaths": [
         ".editorconfig",
         ".gitattributes",
