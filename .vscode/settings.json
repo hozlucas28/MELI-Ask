@@ -1,4 +1,10 @@
 {
+    "files.exclude": {
+        ".pnpm-store/": true
+    },
+    "search.exclude": {
+        ".pnpm-store/": true
+    },
     "editor.codeActionsOnSave": {
         "source.fixAll.oxc": "always"
     }
