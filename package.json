@@ -1,0 +1,28 @@
+{
+    "name": "MELI-Ask",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "node --watch src/app.ts",
+        "fmt": "oxfmt",
+        "fmt:check": "oxfmt --check"
+    },
+    "dependencies": {
+        "express": "^5.2.1"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.6",
+        "@types/node": "^26.6.1",
+        "cspell": "^10.3.3",
+        "lefthook": "^2.1.14",
+        "oxfmt": "^0.68.0",
+        "typescript": "^7.0.2"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "^11.11.0",
+            "onFail": "download"
+        }
+    }
+}
