@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "node --watch src/app.ts",
         "fmt": "oxfmt",
-        "fmt:check": "oxfmt --check"
+        "lint": "oxlint --fix"
     },
     "dependencies": {
         "express": "^5.2.1"
@@ -16,6 +16,8 @@
         "cspell": "^10.3.3",
         "lefthook": "^2.1.14",
         "oxfmt": "^0.68.0",
+        "oxlint": "^1.83.0",
+        "oxlint-tsgolint": "^7.0.2002",
         "typescript": "^7.0.2"
     },
     "devEngines": {
