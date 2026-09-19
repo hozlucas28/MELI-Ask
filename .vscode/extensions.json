@@ -6,6 +6,7 @@
         "zizmor.zizmor-vscode",
         "redhat.vscode-yaml",
         "streetsidesoftware.code-spell-checker",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "streetsidesoftware.code-spell-checker-spanish"
     ]
 }

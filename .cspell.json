@@ -1,0 +1,27 @@
+{
+    "version": "0.2",
+    "useGitignore": true,
+    "language": "es,en",
+    "words": ["lefthook", "zizmor"],
+    "dictionaries": [
+        "software-term-suggestions",
+        "softwareTerms",
+        "software-tools",
+        "networking-terms",
+        "web-services",
+        "computing-acronyms",
+        "coding-compound-terms",
+        "software-terms-alternative"
+    ],
+    "ignorePaths": [
+        ".editorconfig",
+        ".gitattributes",
+        ".gitignore",
+        ".node-version",
+        ".oxfmtrc.json",
+        ".oxlintrc.json",
+        "package.json",
+        "pnpm-lock.yaml",
+        "zizmor.yaml"
+    ]
+}
