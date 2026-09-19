@@ -4,8 +4,9 @@
     "type": "module",
     "scripts": {
         "dev": "node --watch src/app.ts",
-        "fmt": "oxfmt --no-error-on-unmatched-pattern",
-        "lint": "oxlint --fix && zizmor --gh-token=$(gh auth token) --persona=auditor .github/workflows && github-actionlint -ignore 'unexpected key \"description\" for \"workflow\" section.' .github/workflows/*.yaml"
+        "fmt": "oxfmt",
+        "lint": "oxlint --fix && zizmor --gh-token=$(gh auth token) --persona=auditor .github/workflows && github-actionlint -ignore 'unexpected key \"description\" for \"workflow\" section.' .github/workflows/*.yaml",
+        "check:spelling": "cspell ."
     },
     "dependencies": {
         "express": "^5.2.1"
