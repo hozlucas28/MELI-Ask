@@ -2,17 +2,8 @@
     "version": "0.2",
     "useGitignore": true,
     "language": "es,en",
-    "words": ["lefthook", "zizmor"],
-    "dictionaries": [
-        "software-term-suggestions",
-        "softwareTerms",
-        "software-tools",
-        "networking-terms",
-        "web-services",
-        "computing-acronyms",
-        "coding-compound-terms",
-        "software-terms-alternative"
-    ],
+    "words": ["actionlint", "github", "lefthook", "zizmor"],
+    "import": ["@cspell/dict-es-es/cspell-ext.json"],
     "ignorePaths": [
         ".editorconfig",
         ".gitattributes",
@@ -22,6 +13,7 @@
         ".oxlintrc.json",
         "package.json",
         "pnpm-lock.yaml",
+        "tsconfig.json",
         "zizmor.yaml"
     ]
 }
