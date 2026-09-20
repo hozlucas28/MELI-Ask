@@ -40,6 +40,4 @@
 
 ## Testing and Automation
 
-- Place integration tests in the root-level `tests` directory.
-- Use Vitest to test every API endpoint with isolated application instances.
 - Do not manually run formatting or linting commands. Agent hooks are configured to perform those checks automatically.
