@@ -42,3 +42,4 @@
 ## Testing and Automation
 
 - Do not manually run formatting or linting commands. Agent hooks are configured to perform those checks automatically.
+- If an agent hook blocks because `pre-agent-stop` fails, use the hook output to resolve the reported error and continue working until the hook passes.

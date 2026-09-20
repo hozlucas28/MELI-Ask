@@ -2,7 +2,8 @@
     "hooks": {
         "agentStop": [
             {
-                "command": "pnpm exec lefthook run pre-agent-stop"
+                "command": "node .agents/hooks/pre-agent-stop.mjs",
+                "timeoutSec": 120
             }
         ]
     },

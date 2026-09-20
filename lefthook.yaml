@@ -1,14 +1,6 @@
 lefthook: pnpm exec lefthook
 assert_lefthook_installed: true
 
-ai:
-  codex:
-    Stop: pre-agent-stop
-  claude:
-    Stop: pre-agent-stop
-  copilot:
-    agentStop: pre-agent-stop
-
 pre-commit:
   jobs:
     - name: Format and lint files

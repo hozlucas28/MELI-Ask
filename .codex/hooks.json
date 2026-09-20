@@ -4,7 +4,8 @@
             {
                 "hooks": [
                     {
-                        "command": "pnpm exec lefthook run pre-agent-stop",
+                        "command": "node \"$(git rev-parse --show-toplevel)/.agents/hooks/pre-agent-stop.mjs\"",
+                        "timeout": 120,
                         "type": "command"
                     }
                 ]
