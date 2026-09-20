@@ -1,0 +1,10 @@
+{
+    "hooks": {
+        "agentStop": [
+            {
+                "command": "pnpm exec lefthook run pre-agent-stop"
+            }
+        ]
+    },
+    "version": 1
+}

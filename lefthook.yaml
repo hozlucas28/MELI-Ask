@@ -1,4 +1,13 @@
+lefthook: pnpm exec lefthook
 assert_lefthook_installed: true
+
+ai:
+  codex:
+    Stop: pre-agent-stop
+  claude:
+    Stop: pre-agent-stop
+  copilot:
+    agentStop: pre-agent-stop
 
 pre-commit:
   jobs:
@@ -32,3 +41,38 @@ pre-commit:
 
     - name: Check spelling
       run: pnpm exec cspell {staged_files} --no-color --no-must-find-files
+
+pre-agent-stop:
+  jobs:
+    - name: Format and lint files changed by the agent
+      group:
+        jobs:
+          - name: Format with Oxfmt
+            run: pnpm exec oxfmt --no-error-on-unmatched-pattern {files}
+            glob:
+              - "*.{ts,d.ts}"
+              - "*.{json,jsonc,json5}"
+              - "*.{md,yml,yaml}"
+
+          - name: Lint TypeScript files applying safe fixes with Oxlint
+            run: pnpm exec oxlint --fix {files}
+            glob: "*.ts"
+
+    - name: Lint Dependabot configuration file and GitHub Actions workflows changed by the agent
+      group:
+        jobs:
+          - name: With Zizmor
+            run: zizmor --gh-token=$(gh auth token) --persona=auditor --color=never {files}
+          - name: With ActionLint
+            run: pnpm exec github-actionlint -ignore 'unexpected key "description" for "workflow" section.' -no-color {files}
+        parallel: true
+      glob:
+        - .github/dependabot.yaml
+        - .github/workflows/*.yaml
+
+    - name: Check spelling in files changed by the agent
+      run: pnpm exec cspell {files} --no-color --no-must-find-files
+
+  files: |
+    git diff --name-only HEAD --diff-filter=ACMR
+    git ls-files --others --exclude-standard
