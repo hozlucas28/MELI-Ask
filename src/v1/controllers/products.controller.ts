@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import { HttpStatus } from "../enums/http-status.enum.ts"
+import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
 import type { ProductsRepository } from "../repositories/products.repository.ts"
 import type { ProductIdParams } from "../schemas/product.schema.ts"
 

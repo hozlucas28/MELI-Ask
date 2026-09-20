@@ -1,6 +1,6 @@
 import type { NextFunction, Request, RequestHandler, Response } from "express"
 import type { ZodType } from "zod"
-import { HttpStatus } from "../enums/http-status.enum.ts"
+import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
 
 type RequestValidationSchemas = {
     params?: ZodType

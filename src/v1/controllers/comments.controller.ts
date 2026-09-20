@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import { HttpStatus } from "../enums/http-status.enum.ts"
+import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
 import type { CommentsRepository } from "../repositories/comments.repository.ts"
 import type { ProductsRepository } from "../repositories/products.repository.ts"
 import type { CommentBody, CommentParams } from "../schemas/comment.schema.ts"
@@ -52,7 +52,10 @@ class CommentsController {
             const comment = this.commentsRepository.findById(productId, commentId)
             if (!comment) return res.status(HttpStatus.NotFound).json({ message: "Comentario no encontrado." })
 
-            return res.status(201).json(this.commentsRepository.addReply(comment, req.body))
+            const reply = this.commentsRepository.addReply(comment, req.body)
+            req.log.info({ productId, commentId, replyId: reply.id }, "Comment reply created")
+
+            return res.status(201).json(reply)
         }
     }
 
@@ -64,7 +67,10 @@ class CommentsController {
                 return res.status(HttpStatus.NotFound).json({ message: "Producto no encontrado." })
             }
 
-            return res.status(201).json(this.commentsRepository.create(productId, req.body))
+            const comment = this.commentsRepository.create(productId, req.body)
+            req.log.info({ productId, commentId: comment.id }, "Comment created")
+
+            return res.status(201).json(comment)
         }
     }
 }
