@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto"
 import pino from "pino"
 import { pinoHttp } from "pino-http"
-import { LOG_LEVEL } from "../env.ts"
-import { HttpStatus } from "./enums/http-status.enum.ts"
+import { LOG_LEVEL } from "#src/env"
+import { HttpStatus } from "#shared/enums/http-status.enum"
 
 import type { Request, Response } from "express"
 

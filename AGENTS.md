@@ -28,6 +28,7 @@
 
 - Use `type` for data shapes. Use `interface` only for behavioral contracts, such as repository interfaces.
 - Keep type-only imports separate and use `import type`.
+- Use the `#src/*`, `#v1/*`, and `#shared/*` aliases for local imports instead of relative paths.
 - Use named exports only. Place value exports at the end of the module and type exports in a separate `export type { ... }` statement.
 - Name repository contracts and implementations in plural form.
 - Repository implementations must be classes with explicit constructors. Initialize attribute values inside constructors, not in field declarations.

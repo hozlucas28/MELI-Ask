@@ -1,8 +1,8 @@
-import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
+import { HttpStatus } from "#shared/enums/http-status.enum"
 
 import type { Request, Response } from "express"
-import type { ProductsRepository } from "../repositories/products.repository.ts"
-import type { ProductIdParams } from "../schemas/product.schema.ts"
+import type { ProductsRepository } from "#v1/repositories/products.repository"
+import type { ProductIdParams } from "#v1/schemas/product.schema"
 
 class ProductsController {
     private readonly productsRepository: ProductsRepository

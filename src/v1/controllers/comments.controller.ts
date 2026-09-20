@@ -1,10 +1,10 @@
-import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
+import { HttpStatus } from "#shared/enums/http-status.enum"
 
 import type { Request, Response } from "express"
-import type { CommentsRepository } from "../repositories/comments.repository.ts"
-import type { ProductsRepository } from "../repositories/products.repository.ts"
-import type { CommentBody, CommentParams } from "../schemas/comment.schema.ts"
-import type { ProductIdParams } from "../schemas/product.schema.ts"
+import type { CommentsRepository } from "#v1/repositories/comments.repository"
+import type { ProductsRepository } from "#v1/repositories/products.repository"
+import type { CommentBody, CommentParams } from "#v1/schemas/comment.schema"
+import type { ProductIdParams } from "#v1/schemas/product.schema"
 
 class CommentsController {
     private readonly commentsRepository: CommentsRepository

@@ -2,6 +2,11 @@
     "name": "MELI-Ask",
     "version": "1.0.0",
     "type": "module",
+    "imports": {
+        "#src/*": "./src/*.ts",
+        "#v1/*": "./src/v1/*.ts",
+        "#shared/*": "./src/shared/*.ts"
+    },
     "scripts": {
         "dev": "node --watch --env-file=.env.development src/api.ts",
         "test": "cd docs/bruno && bru run --tests-only --noproxy",

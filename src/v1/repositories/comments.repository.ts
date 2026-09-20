@@ -1,4 +1,4 @@
-import type { Comment, CommentBody, Reply } from "../types/comment.ts"
+import type { Comment, CommentBody, Reply } from "#v1/types/comment"
 
 interface CommentsRepository {
     addReply(comment: Comment, body: CommentBody): Reply

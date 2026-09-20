@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { productIdParamsSchema } from "./product.schema.ts"
+import { productIdParamsSchema } from "#v1/schemas/product.schema"
 
 const commentParamsSchema = productIdParamsSchema.extend({
     commentId: z.uuid()

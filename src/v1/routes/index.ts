@@ -1,6 +1,6 @@
 import { Router } from "express"
-import { errorHandler } from "../middlewares/error-handler.middleware.ts"
-import { productsRouter } from "./products.routes.ts"
+import { errorHandler } from "#v1/middlewares/error-handler.middleware"
+import { productsRouter } from "#v1/routes/products.routes"
 
 const v1Router = Router()
 

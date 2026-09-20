@@ -1,10 +1,9 @@
 import compression from "compression"
 import express from "express"
 import helmet from "helmet"
-import { v1Router } from "./v1/routes/index.ts"
-import { API_PORT } from "./env.ts"
-import { httpLogger, logger } from "./shared/logger.ts"
-import { errorHandler } from "./v1/middlewares/error-handler.middleware.ts"
+import { API_PORT } from "#src/env"
+import { httpLogger, logger } from "#shared/logger"
+import { v1Router } from "#v1/routes/index"
 
 import type { Express } from "express"
 

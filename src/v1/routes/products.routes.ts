@@ -1,14 +1,14 @@
 import { Router } from "express"
-import { ProductsController } from "../controllers/products.controller.ts"
-import { CommentsController } from "../controllers/comments.controller.ts"
-import { validateRequest } from "../middlewares/validate-request.middleware.ts"
-import { InMemoryCommentsRepository } from "../repositories/comments.repository.ts"
-import { InMemoryProductsRepository } from "../repositories/products.repository.ts"
-import { commentBodySchema, commentParamsSchema } from "../schemas/comment.schema.ts"
-import { productIdParamsSchema } from "../schemas/product.schema.ts"
+import { CommentsController } from "#v1/controllers/comments.controller"
+import { ProductsController } from "#v1/controllers/products.controller"
+import { validateRequest } from "#v1/middlewares/validate-request.middleware"
+import { InMemoryCommentsRepository } from "#v1/repositories/comments.repository"
+import { InMemoryProductsRepository } from "#v1/repositories/products.repository"
+import { commentBodySchema, commentParamsSchema } from "#v1/schemas/comment.schema"
+import { productIdParamsSchema } from "#v1/schemas/product.schema"
 
-import type { CommentBody, CommentParams } from "../schemas/comment.schema.ts"
-import type { ProductIdParams } from "../schemas/product.schema.ts"
+import type { CommentBody, CommentParams } from "#v1/schemas/comment.schema"
+import type { ProductIdParams } from "#v1/schemas/product.schema"
 
 // Modules
 const productsRepository = new InMemoryProductsRepository()

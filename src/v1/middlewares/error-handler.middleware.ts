@@ -1,4 +1,4 @@
-import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
+import { HttpStatus } from "#shared/enums/http-status.enum"
 
 import type { ErrorRequestHandler } from "express"
 
