@@ -22,6 +22,10 @@ pre-commit:
               - "*.{md,yml,yaml}"
             stage_fixed: true
 
+          - name: Lint TypeScript files with tsc
+            run: pnpm exec tsc --noEmit
+            glob: "*.ts"
+
           - name: Lint TypeScript files applying safe fixes with Oxlint
             run: pnpm exec oxlint --fix {staged_files}
             glob: "*.ts"
@@ -53,6 +57,10 @@ pre-agent-stop:
               - "*.{ts,d.ts}"
               - "*.{json,jsonc,json5}"
               - "*.{md,yml,yaml}"
+
+          - name: Lint TypeScript files with tsc
+            run: pnpm exec tsc --noEmit
+            glob: "*.ts"
 
           - name: Lint TypeScript files applying safe fixes with Oxlint
             run: pnpm exec oxlint --fix {files}
