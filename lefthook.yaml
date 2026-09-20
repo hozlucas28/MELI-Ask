@@ -24,11 +24,13 @@ pre-commit:
 
           - name: Lint TypeScript files with tsc
             run: pnpm exec tsc --noEmit
-            glob: "*.ts"
+            glob:
+              - "*.ts"
 
           - name: Lint TypeScript files applying safe fixes with Oxlint
             run: pnpm exec oxlint --fix {staged_files}
-            glob: "*.ts"
+            glob:
+              - "*.ts"
             stage_fixed: true
 
     - name: Lint Dependabot configuration file and GitHub Actions workflows
@@ -36,12 +38,15 @@ pre-commit:
         jobs:
           - name: With Zizmor
             run: zizmor --gh-token=$(gh auth token) --persona=auditor --color=never {staged_files}
+            glob:
+              - .github/dependabot.yaml
+              - .github/workflows/*.yaml
+
           - name: With ActionLint
             run: pnpm exec github-actionlint -ignore 'unexpected key "description" for "workflow" section.' -no-color {staged_files}
+            glob:
+              - .github/workflows/*.yaml
         parallel: true
-      glob:
-        - .github/dependabot.yaml
-        - .github/workflows/*.yaml
 
     - name: Check spelling
       run: pnpm exec cspell {staged_files} --no-color --no-must-find-files
@@ -60,23 +65,28 @@ pre-agent-stop:
 
           - name: Lint TypeScript files with tsc
             run: pnpm exec tsc --noEmit
-            glob: "*.ts"
+            glob:
+              - "*.ts"
 
           - name: Lint TypeScript files applying safe fixes with Oxlint
             run: pnpm exec oxlint --fix {files}
-            glob: "*.ts"
+            glob:
+              - "*.ts"
 
     - name: Lint Dependabot configuration file and GitHub Actions workflows changed by the agent
       group:
         jobs:
           - name: With Zizmor
             run: zizmor --gh-token=$(gh auth token) --persona=auditor --color=never {files}
+            glob:
+              - .github/dependabot.yaml
+              - .github/workflows/*.yaml
+
           - name: With ActionLint
             run: pnpm exec github-actionlint -ignore 'unexpected key "description" for "workflow" section.' -no-color {files}
+            glob:
+              - .github/workflows/*.yaml
         parallel: true
-      glob:
-        - .github/dependabot.yaml
-        - .github/workflows/*.yaml
 
     - name: Check spelling in files changed by the agent
       run: pnpm exec cspell {files} --no-color --no-must-find-files
