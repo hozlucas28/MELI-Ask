@@ -7,17 +7,19 @@
         "test": "cd docs/bruno && bru run --tests-only --noproxy",
         "fmt": "oxfmt",
         "lint": "tsc --noEmit && oxlint --fix && zizmor --gh-token=$(gh auth token) --persona=auditor .github/workflows && github-actionlint -ignore 'unexpected key \"description\" for \"workflow\" section.' .github/workflows/*.yaml",
-        "lint": "tsc --noEmit && oxlint --fix && zizmor --gh-token=$(gh auth token) --persona=auditor .github/workflows && github-actionlint -ignore 'unexpected key \"description\" for \"workflow\" section.' .github/workflows/*.yaml",
         "check:spelling": "cspell ."
     },
     "dependencies": {
+        "compression": "^1.8.2",
         "express": "^5.2.1",
+        "helmet": "^8.3.0",
         "pino": "^10.3.1",
         "pino-http": "^11.0.0",
         "zod": "^4.6.5"
     },
     "devDependencies": {
         "@cspell/dict-es-es": "^3.0.8",
+        "@types/compression": "^1.8.1",
         "@types/express": "^5.0.6",
         "@types/node": "^26.6.1",
         "@usebruno/cli": "^4.1.0",
