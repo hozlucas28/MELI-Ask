@@ -1,13 +1,14 @@
 import { Router } from "express"
 import { ProductsController } from "../controllers/products.controller.ts"
-import type { ProductIdParams } from "../schemas/product.schema.ts"
 import { CommentsController } from "../controllers/comments.controller.ts"
 import { validateRequest } from "../middlewares/validate-request.middleware.ts"
 import { InMemoryCommentsRepository } from "../repositories/comments.repository.ts"
 import { InMemoryProductsRepository } from "../repositories/products.repository.ts"
 import { commentBodySchema, commentParamsSchema } from "../schemas/comment.schema.ts"
 import { productIdParamsSchema } from "../schemas/product.schema.ts"
+
 import type { CommentBody, CommentParams } from "../schemas/comment.schema.ts"
+import type { ProductIdParams } from "../schemas/product.schema.ts"
 
 // Modules
 const productsRepository = new InMemoryProductsRepository()
@@ -29,7 +30,7 @@ productsRouter
     .get<ProductIdParams>(
         "/:productId/comments",
         validateRequest({ params: productIdParamsSchema }),
-        commentsController.getProductComments()
+        commentsController.getComments()
     )
     .post<ProductIdParams, unknown, CommentBody>(
         "/:productId/comments",

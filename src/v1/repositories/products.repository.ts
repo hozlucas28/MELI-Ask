@@ -12,21 +12,21 @@ class InMemoryProductsRepository implements ProductsRepository {
         this.products = [
             {
                 id: "264a6a79-e6df-4da7-8c03-a8698a7272b1",
-                name: "Auriculares inalámbricos",
+                name: "Wireless headphones",
                 price: 29999,
-                description: "Auriculares Bluetooth con cancelación de ruido."
+                description: "Bluetooth headphones with noise cancellation."
             },
             {
                 id: "b92c5da6-8857-44f1-b69a-968292d3ef01",
-                name: "Teclado mecánico",
+                name: "Mechanical keyboard",
                 price: 89999,
-                description: "Teclado compacto con switches mecánicos."
+                description: "Compact keyboard with mechanical switches."
             },
             {
                 id: "d5421329-0f66-4d88-a49f-d1f9110ae2ec",
-                name: "Monitor 27 pulgadas",
+                name: "27-inch monitor",
                 price: 349999,
-                description: "Monitor IPS 144 Hz con resolución QHD."
+                description: "144 Hz IPS monitor with QHD resolution."
             }
         ]
     }

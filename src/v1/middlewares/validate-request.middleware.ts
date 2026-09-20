@@ -1,6 +1,7 @@
+import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
+
 import type { NextFunction, Request, RequestHandler, Response } from "express"
 import type { ZodType } from "zod"
-import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
 
 type RequestValidationSchemas = {
     params?: ZodType
@@ -14,7 +15,7 @@ function validateRequest(schemas: RequestValidationSchemas): RequestHandler {
 
             if (!params.success) {
                 res.status(HttpStatus.BadRequest).json({
-                    message: "Los datos de la solicitud no son válidos.",
+                    message: "Request data is invalid.",
                     errors: params.error.issues
                 })
                 return
@@ -26,7 +27,7 @@ function validateRequest(schemas: RequestValidationSchemas): RequestHandler {
 
             if (!body.success) {
                 res.status(HttpStatus.BadRequest).json({
-                    message: "Los datos de la solicitud no son válidos.",
+                    message: "Request data is invalid.",
                     errors: body.error.issues
                 })
                 return

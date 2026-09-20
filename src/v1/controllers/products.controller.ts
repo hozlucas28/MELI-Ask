@@ -1,5 +1,6 @@
-import type { Request, Response } from "express"
 import { HttpStatus } from "../../shared/enums/http-status.enum.ts"
+
+import type { Request, Response } from "express"
 import type { ProductsRepository } from "../repositories/products.repository.ts"
 import type { ProductIdParams } from "../schemas/product.schema.ts"
 
@@ -19,7 +20,7 @@ class ProductsController {
     getProductById() {
         return (req: Request<ProductIdParams>, res: Response): Response => {
             const product = this.productsRepository.getById(req.params.productId)
-            if (!product) return res.status(HttpStatus.NotFound).json({ message: "Producto no encontrado." })
+            if (!product) return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
 
             return res.json(product)
         }
