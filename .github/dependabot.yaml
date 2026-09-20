@@ -1,0 +1,32 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    commit-message:
+      prefix: deps(pnpm)
+    labels:
+      - bot
+      - dependencies
+    cooldown:
+      default-days: 7
+      semver-patch-days: 3
+    schedule:
+      interval: cron
+      cronjob: 0 8 * * 1 # Every Monday at 08:00
+      timezone: America/Argentina/Buenos_Aires
+
+  - package-ecosystem: github-actions
+    directory: /
+    commit-message:
+      prefix: deps(github-actions)
+    labels:
+      - bot
+      - github actions
+    cooldown:
+      default-days: 7
+      semver-patch-days: 3
+    schedule:
+      interval: cron
+      cronjob: 0 8 * * 1 # Every Monday at 08:00
+      timezone: America/Argentina/Buenos_Aires
