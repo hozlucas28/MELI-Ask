@@ -3,10 +3,11 @@
     "useGitignore": true,
     "import": ["@cspell/dict-es-es/cspell-ext.json"],
     "language": "es,en",
-    "words": ["ACMR", "actionlint", "claude", "zizmor"],
+    "words": ["ACMR", "actionlint", "claude", "healthcheck", "meli", "zizmor"],
     "dictionaries": [
         "bash",
         "docker",
+        "git",
         "lorem-ipsum",
         "networking-terms",
         "node",
@@ -17,6 +18,12 @@
         "typescript"
     ],
     "ignorePaths": [
+        ".agents/**",
+        ".claude/**",
+        ".codex/**",
+        ".github/hooks/**",
+        ".vscode/extensions.json",
+        ".vscode/settings.json",
         ".editorconfig",
         ".gitattributes",
         ".gitignore",
