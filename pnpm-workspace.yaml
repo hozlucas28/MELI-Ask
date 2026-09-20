@@ -6,3 +6,7 @@ blockExoticSubdeps: true
 
 allowBuilds:
   lefthook: true
+
+trustPolicyExclude:
+  - semver@5.7.2
+  - semver@6.3.1

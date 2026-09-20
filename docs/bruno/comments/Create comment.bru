@@ -1,0 +1,45 @@
+meta {
+  name: Create comment
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/products/:productId/comments
+  body: json
+  auth: none
+}
+
+params:path {
+  productId: 264a6a79-e6df-4da7-8c03-a8698a7272b1
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "authorId": "8e2732d0-1f5a-4e7c-a0b7-2bfa6b8bc7d0",
+    "content": "Excellent product, it works very well."
+  }
+}
+
+script:post-response {
+  bru.setVar("commentId", res.body.id);
+}
+
+tests {
+  test("should create the comment", function() {
+    expect(res.status).to.equal(201);
+    expect(res.body).to.have.property("id");
+    expect(res.body.content).to.equal("Excellent product, it works very well.");
+  });
+}
+
+docs {
+  Creates a comment for the selected product. authorId must be a UUID and content must contain between 4 and 1024 characters.
+  
+  Edit productId in the Params tab to target a different product.
+}

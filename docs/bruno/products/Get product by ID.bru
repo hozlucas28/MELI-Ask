@@ -1,0 +1,30 @@
+meta {
+  name: Get product by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/products/:productId
+  body: none
+  auth: none
+}
+
+params:path {
+  productId: 264a6a79-e6df-4da7-8c03-a8698a7272b1
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("should return the product", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property("id");
+  });
+}
+
+docs {
+  Retrieves a product by UUID. Edit productId in the Params tab to target a different product.
+}

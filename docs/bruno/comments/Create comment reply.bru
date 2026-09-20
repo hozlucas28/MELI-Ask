@@ -1,0 +1,40 @@
+meta {
+  name: Create comment reply
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/products/:productId/comments/:commentId/replies
+  body: json
+  auth: none
+}
+
+params:path {
+  productId: 264a6a79-e6df-4da7-8c03-a8698a7272b1
+  commentId: {{commentId}}
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "authorId": "8e2732d0-1f5a-4e7c-a0b7-2bfa6b8bc7d0",
+    "content": "Thank you for sharing your experience."
+  }
+}
+
+tests {
+  test("should create the reply", function() {
+    expect(res.status).to.equal(201);
+    expect(res.body).to.have.property("id");
+    expect(res.body.content).to.equal("Thank you for sharing your experience.");
+  });
+}
+
+docs {
+  Creates a reply for an existing comment. Run Create Product Comment first to populate commentId automatically, or edit the path parameters in the Params tab.
+}

@@ -1,0 +1,31 @@
+meta {
+  name: List comment replies
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/products/:productId/comments/:commentId/replies
+  body: none
+  auth: none
+}
+
+params:path {
+  productId: 264a6a79-e6df-4da7-8c03-a8698a7272b1
+  commentId: {{commentId}}
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("should return a list", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.an("array");
+  });
+}
+
+docs {
+  Retrieves the replies for a comment. Run Create Product Comment first to populate commentId automatically, or edit the path parameters in the Params tab.
+}
