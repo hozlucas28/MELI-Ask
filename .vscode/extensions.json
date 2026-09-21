@@ -8,6 +8,9 @@
         "streetsidesoftware.code-spell-checker",
         "github.vscode-github-actions",
         "streetsidesoftware.code-spell-checker-spanish",
-        "bruno-api-client.bruno"
+        "bruno-api-client.bruno",
+        "ms-azuretools.vscode-containers",
+        "ms-azuretools.vscode-docker",
+        "docker.docker"
     ]
 }

@@ -8,7 +8,8 @@
         "#shared/*": "./src/shared/*.ts"
     },
     "scripts": {
-        "dev": "node --watch --env-file=.env.development src/api.ts",
+        "start": "node src/api.ts",
+        "dev": "node --watch --env-file=.env src/api.ts",
         "test": "cd docs/bruno && bru run --tests-only --noproxy",
         "fmt": "oxfmt",
         "lint": "tsc --noEmit && oxlint --fix && zizmor --gh-token=$(gh auth token) --persona=auditor .github/workflows && github-actionlint -ignore 'unexpected key \"description\" for \"workflow\" section.' .github/workflows/*.yaml",

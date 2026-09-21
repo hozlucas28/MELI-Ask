@@ -3,7 +3,21 @@
     "useGitignore": true,
     "import": ["@cspell/dict-es-es/cspell-ext.json"],
     "language": "es,en",
-    "words": ["ACMR", "actionlint", "claude", "healthcheck", "meli", "zizmor"],
+    "words": [
+        "ACMR",
+        "actionlint",
+        "claude",
+        "debian",
+        "healthcheck",
+        "isready",
+        "meli",
+        "nemotron",
+        "nvidia",
+        "openrouter",
+        "OPENROUTER",
+        "pgvector",
+        "zizmor"
+    ],
     "dictionaries": [
         "bash",
         "docker",
