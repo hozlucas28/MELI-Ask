@@ -26,6 +26,8 @@
 - Give every product a UUID owner identifier. Only replies authored by that product owner are eligible for the product knowledge base.
 - Use pgvector to embed owner question-and-answer pairs and keep retrieval isolated by product.
 - Expose `POST /api/v1/:productId/ask` with an agentic OpenRouter model that must retrieve product context before answering.
+- When retrieval returns no answers, return a Spanish message explaining that there is insufficient information and directing the user to create a question in the questions section; do not use a fixed similarity threshold that could discard relevant context.
+- Seed between eight and twelve answered questions for every product.
 - Use free OpenRouter models for both response generation and embeddings. Configure the OpenRouter API key and model identifiers through environment variables.
 - Never commit API keys. Load developer credentials from `.env`, which is ignored by Git.
 - Every ID must be a UUID.

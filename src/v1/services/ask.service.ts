@@ -3,6 +3,9 @@ import { callModel } from "@openrouter/agent"
 import type { OpenRouter } from "@openrouter/sdk"
 import type { ProductRagService } from "#v1/services/product-rag.service"
 
+const insufficientInformationAnswer =
+    "No tengo información suficiente para responder tu pregunta. Deberías crear una pregunta en la sección de preguntas."
+
 type AskProduct = {
     productId: string
     question: string
@@ -40,6 +43,11 @@ class AgenticAskService implements ProductQuestionAnswerer {
 
     async *askStream(input: AskProduct, signal?: AbortSignal): AsyncIterable<string> {
         const context = await this.productRagService.retrieve({ productId: input.productId, query: input.question })
+        if (context.length === 0) {
+            yield insufficientInformationAnswer
+
+            return
+        }
         const instructions = [
             "Answer the user's product question in the same language as the question.",
             "Use only facts explicitly supported by the retrieved owner answers.",
