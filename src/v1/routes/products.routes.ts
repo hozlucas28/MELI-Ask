@@ -2,50 +2,56 @@ import { Router } from "express"
 import { CommentsController } from "#v1/controllers/comments.controller"
 import { ProductsController } from "#v1/controllers/products.controller"
 import { validateRequest } from "#v1/middlewares/validate-request.middleware"
-import { InMemoryCommentsRepository } from "#v1/repositories/comments.repository"
-import { InMemoryProductsRepository } from "#v1/repositories/products.repository"
+import { PostgresCommentsRepository } from "#v1/repositories/comments.repository"
+import { PostgresProductsRepository } from "#v1/repositories/products.repository"
 import { commentBodySchema, commentParamsSchema } from "#v1/schemas/comment.schema"
 import { productIdParamsSchema } from "#v1/schemas/product.schema"
 
+import type { Pool } from "pg"
 import type { CommentBody, CommentParams } from "#v1/schemas/comment.schema"
 import type { ProductIdParams } from "#v1/schemas/product.schema"
 
-// Modules
-const productsRepository = new InMemoryProductsRepository()
-const productsController = new ProductsController(productsRepository)
+function createProductsRouter(database: Pool): Router {
+    // Modules
+    const productsRepository = new PostgresProductsRepository(database)
+    const productsController = new ProductsController(productsRepository)
 
-const commentsRepository = new InMemoryCommentsRepository()
-const commentsController = new CommentsController(commentsRepository, productsRepository)
+    const commentsRepository = new PostgresCommentsRepository(database)
+    const commentsControllerInput = { commentsRepository, productsRepository }
+    const commentsController = new CommentsController(commentsControllerInput)
 
-// Routes
-const productsRouter = Router()
+    // Routes
+    const productsRouter = Router()
 
-productsRouter
-    .get("/", productsController.getProducts())
-    .get<ProductIdParams>(
-        "/:productId",
-        validateRequest({ params: productIdParamsSchema }),
-        productsController.getProductById()
-    )
-    .get<ProductIdParams>(
-        "/:productId/comments",
-        validateRequest({ params: productIdParamsSchema }),
-        commentsController.getComments()
-    )
-    .post<ProductIdParams, unknown, CommentBody>(
-        "/:productId/comments",
-        validateRequest({ params: productIdParamsSchema, body: commentBodySchema }),
-        commentsController.createComment()
-    )
-    .get<CommentParams>(
-        "/:productId/comments/:commentId/replies",
-        validateRequest({ params: commentParamsSchema }),
-        commentsController.getCommentReplies()
-    )
-    .post<CommentParams, unknown, CommentBody>(
-        "/:productId/comments/:commentId/replies",
-        validateRequest({ params: commentParamsSchema, body: commentBodySchema }),
-        commentsController.replyComment()
-    )
+    productsRouter
+        .get("/", productsController.getProducts())
+        .get<ProductIdParams>(
+            "/:productId",
+            validateRequest({ params: productIdParamsSchema }),
+            productsController.getProductById()
+        )
+        .get<ProductIdParams>(
+            "/:productId/comments",
+            validateRequest({ params: productIdParamsSchema }),
+            commentsController.getComments()
+        )
+        .post<ProductIdParams, unknown, CommentBody>(
+            "/:productId/comments",
+            validateRequest({ params: productIdParamsSchema, body: commentBodySchema }),
+            commentsController.createComment()
+        )
+        .get<CommentParams>(
+            "/:productId/comments/:commentId/replies",
+            validateRequest({ params: commentParamsSchema }),
+            commentsController.getCommentReplies()
+        )
+        .post<CommentParams, unknown, CommentBody>(
+            "/:productId/comments/:commentId/replies",
+            validateRequest({ params: commentParamsSchema, body: commentBodySchema }),
+            commentsController.replyComment()
+        )
 
-export { productsRouter }
+    return productsRouter
+}
+
+export { createProductsRouter }

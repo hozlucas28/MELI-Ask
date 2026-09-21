@@ -1,19 +1,19 @@
-import compression from "compression"
-import express from "express"
-import helmet from "helmet"
-import { API_PORT } from "#src/env"
-import { httpLogger, logger } from "#shared/logger"
-import { v1Router } from "#v1/routes/index"
+import { createApp } from "#src/app"
+import { APP_PORT } from "#src/env"
+import { database } from "#shared/database"
+import { logger } from "#shared/logger"
+import { initializeV1Database } from "#v1/database/initialize"
 
-import type { Express } from "express"
+async function startApi() {
+    await initializeV1Database(database)
 
-const api: Express = express()
+    const api = createApp(database)
 
-// Middlewares
-api.use(httpLogger)
-api.use(helmet())
-api.use(compression())
-api.use(express.json())
-api.use("/api/v1", v1Router)
+    api.listen(APP_PORT, () => logger.info({ port: APP_PORT }, "Server listening"))
+}
 
-api.listen(API_PORT, () => logger.info({ port: API_PORT }, "Server listening"))
+startApi().catch(async error => {
+    logger.fatal({ error }, "unable to start server")
+    await database.end()
+    process.exitCode = 1
+})

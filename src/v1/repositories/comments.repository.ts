@@ -1,55 +1,118 @@
+import type { Pool } from "pg"
 import type { Comment, CommentBody, Reply } from "#v1/types/comment"
 
+type CommentIdentifier = {
+    commentId: string
+    productId: string
+}
+
+type CreateComment = {
+    body: CommentBody
+    productId: string
+}
+
+type CreateReply = {
+    body: CommentBody
+    commentId: string
+}
+
+type CommentRow = Omit<Comment, "createdAt"> & {
+    createdAt: Date
+}
+
+type ReplyRow = Omit<Reply, "createdAt"> & {
+    createdAt: Date
+}
+
 interface CommentsRepository {
-    addReply(comment: Comment, body: CommentBody): Reply
-    create(productId: string, body: CommentBody): Comment
-    findById(productId: string, commentId: string): Comment | undefined
-    getByProductId(productId: string): Comment[]
+    addReply(input: CreateReply): Promise<Reply>
+    create(input: CreateComment): Promise<Comment>
+    findById(input: CommentIdentifier): Promise<Comment | undefined>
+    getByProductId(productId: string): Promise<Comment[]>
 }
 
-class InMemoryCommentsRepository implements CommentsRepository {
-    private readonly comments: Comment[]
+class PostgresCommentsRepository implements CommentsRepository {
+    private readonly database: Pool
 
-    constructor() {
-        this.comments = []
+    constructor(database: Pool) {
+        this.database = database
     }
 
-    getByProductId(productId: string): Comment[] {
-        return this.comments.filter(comment => comment.productId === productId)
+    async getByProductId(productId: string): Promise<Comment[]> {
+        const result = await this.database.query<CommentRow>(
+            `
+                SELECT
+                    comments.id,
+                    comments.product_id AS "productId",
+                    comments.author_id AS "authorId",
+                    comments.content,
+                    comments.created_at AS "createdAt",
+                    COALESCE(
+                        jsonb_agg(
+                            jsonb_build_object(
+                                'id', replies.id,
+                                'authorId', replies.author_id,
+                                'content', replies.content,
+                                'createdAt', replies.created_at
+                            ) ORDER BY replies.created_at
+                        ) FILTER (WHERE replies.id IS NOT NULL),
+                        '[]'::jsonb
+                    ) AS replies
+                FROM comments
+                LEFT JOIN replies ON replies.comment_id = comments.id
+                WHERE comments.product_id = $1
+                GROUP BY comments.id
+                ORDER BY comments.created_at
+            `,
+            [productId]
+        )
+
+        return result.rows.map(row => this.mapComment(row))
     }
 
-    findById(productId: string, commentId: string): Comment | undefined {
-        return this.comments.find(comment => comment.id === commentId && comment.productId === productId)
+    async findById(input: CommentIdentifier): Promise<Comment | undefined> {
+        const comments = await this.getByProductId(input.productId)
+
+        return comments.find(comment => comment.id === input.commentId)
     }
 
-    create(productId: string, body: CommentBody): Comment {
-        const comment: Comment = {
-            id: crypto.randomUUID(),
-            productId,
-            authorId: body.authorId,
-            content: body.content,
-            createdAt: new Date().toISOString(),
-            replies: []
-        }
+    async create(input: CreateComment): Promise<Comment> {
+        const result = await this.database.query<CommentRow>(
+            `
+                INSERT INTO comments (id, product_id, author_id, content)
+                VALUES ($1, $2, $3, $4)
+                RETURNING
+                    id,
+                    product_id AS "productId",
+                    author_id AS "authorId",
+                    content,
+                    created_at AS "createdAt",
+                    '[]'::jsonb AS replies
+            `,
+            [crypto.randomUUID(), input.productId, input.body.authorId, input.body.content]
+        )
 
-        this.comments.push(comment)
-
-        return comment
+        return this.mapComment(result.rows[0])
     }
 
-    addReply(comment: Comment, body: CommentBody): Reply {
-        const reply: Reply = {
-            id: crypto.randomUUID(),
-            authorId: body.authorId,
-            content: body.content,
-            createdAt: new Date().toISOString()
-        }
+    async addReply(input: CreateReply): Promise<Reply> {
+        const result = await this.database.query<ReplyRow>(
+            `
+                INSERT INTO replies (id, comment_id, author_id, content)
+                VALUES ($1, $2, $3, $4)
+                RETURNING id, author_id AS "authorId", content, created_at AS "createdAt"
+            `,
+            [crypto.randomUUID(), input.commentId, input.body.authorId, input.body.content]
+        )
+        const reply = result.rows[0]
 
-        comment.replies.push(reply)
+        return { ...reply, createdAt: reply.createdAt.toISOString() }
+    }
 
-        return reply
+    private mapComment(row: CommentRow): Comment {
+        return { ...row, createdAt: row.createdAt.toISOString() }
     }
 }
 
-export { InMemoryCommentsRepository }
+export { PostgresCommentsRepository }
 export type { CommentsRepository }

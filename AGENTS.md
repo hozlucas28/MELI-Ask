@@ -17,7 +17,13 @@
 ## API and Data Rules
 
 - The current API version exposes product, comment, and reply endpoints under `/api/v1`.
-- Products are hardcoded. Comments and replies are temporarily persisted in memory through repositories until a database implementation replaces them.
+- Persist products, comments, and replies in PostgreSQL. Initialize the schema and idempotent demo seed when the API starts.
+- Run PostgreSQL through `compose.yaml` without persistent volumes; this repository is a demonstration rather than a production deployment.
+- Give every product a UUID owner identifier. Only replies authored by that product owner are eligible for the product knowledge base.
+- Use pgvector to embed owner question-and-answer pairs and keep retrieval isolated by product.
+- Expose `POST /api/v1/:productId/ask` with an agentic OpenRouter model that must retrieve product context before answering.
+- Use free OpenRouter models for both response generation and embeddings. Configure the OpenRouter API key and model identifiers through environment variables.
+- Never commit API keys. Load developer credentials from `.env`, which is ignored by Git.
 - Every ID must be a UUID.
 - Model relationships between entities through the applicable ID.
 - Validate every request parameter and body with Zod middleware before it reaches a controller.

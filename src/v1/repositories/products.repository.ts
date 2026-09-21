@@ -1,44 +1,41 @@
+import type { Pool } from "pg"
 import type { Product } from "#v1/types/product"
 
 interface ProductsRepository {
-    getAll(): Product[]
-    getById(productId: string): Product | undefined
+    getAll(): Promise<Product[]>
+    getById(productId: string): Promise<Product | undefined>
 }
 
-class InMemoryProductsRepository implements ProductsRepository {
-    private readonly products: Product[]
+class PostgresProductsRepository implements ProductsRepository {
+    private readonly database: Pool
 
-    constructor() {
-        this.products = [
-            {
-                id: "264a6a79-e6df-4da7-8c03-a8698a7272b1",
-                name: "Wireless headphones",
-                price: 29999,
-                description: "Bluetooth headphones with noise cancellation."
-            },
-            {
-                id: "b92c5da6-8857-44f1-b69a-968292d3ef01",
-                name: "Mechanical keyboard",
-                price: 89999,
-                description: "Compact keyboard with mechanical switches."
-            },
-            {
-                id: "d5421329-0f66-4d88-a49f-d1f9110ae2ec",
-                name: "27-inch monitor",
-                price: 349999,
-                description: "144 Hz IPS monitor with QHD resolution."
-            }
-        ]
+    constructor(database: Pool) {
+        this.database = database
     }
 
-    getAll(): Product[] {
-        return this.products
+    async getAll(): Promise<Product[]> {
+        const result = await this.database.query<Product>(`
+            SELECT id, owner_id AS "ownerId", name, price, description
+            FROM products
+            ORDER BY name
+        `)
+
+        return result.rows
     }
 
-    getById(productId: string): Product | undefined {
-        return this.products.find(product => product.id === productId)
+    async getById(productId: string): Promise<Product | undefined> {
+        const result = await this.database.query<Product>(
+            `
+                SELECT id, owner_id AS "ownerId", name, price, description
+                FROM products
+                WHERE id = $1
+            `,
+            [productId]
+        )
+
+        return result.rows[0]
     }
 }
 
-export { InMemoryProductsRepository }
+export { PostgresProductsRepository }
 export type { ProductsRepository }

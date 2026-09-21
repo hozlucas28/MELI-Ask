@@ -1,11 +1,20 @@
 import { Router } from "express"
 import { errorHandler } from "#v1/middlewares/error-handler.middleware"
-import { productsRouter } from "#v1/routes/products.routes"
+import { createAskRouter } from "#v1/routes/ask.routes"
+import { createProductsRouter } from "#v1/routes/products.routes"
 
-const v1Router = Router()
+import type { Pool } from "pg"
 
-// Middlewares
-v1Router.use("/products", productsRouter)
-v1Router.use(errorHandler)
+function createV1Router(database: Pool): Router {
+    const v1Router = Router()
+    const askRouter = createAskRouter(database)
+    const productsRouter = createProductsRouter(database)
 
-export { v1Router }
+    v1Router.use(askRouter)
+    v1Router.use("/products", productsRouter)
+    v1Router.use(errorHandler)
+
+    return v1Router
+}
+
+export { createV1Router }

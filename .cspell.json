@@ -6,9 +6,15 @@
     "words": [
         "ACMR",
         "actionlint",
+        "attname",
+        "attrelid",
+        "atttypid",
+        "atttypmod",
         "claude",
         "debian",
+        "halfvec",
         "healthcheck",
+        "hnsw",
         "isready",
         "meli",
         "nemotron",
@@ -16,6 +22,7 @@
         "openrouter",
         "OPENROUTER",
         "pgvector",
+        "regclass",
         "zizmor"
     ],
     "dictionaries": [

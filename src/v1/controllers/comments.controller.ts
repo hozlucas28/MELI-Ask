@@ -10,32 +10,30 @@ class CommentsController {
     private readonly commentsRepository: CommentsRepository
     private readonly productsRepository: ProductsRepository
 
-    constructor(commentsRepository: CommentsRepository, productsRepository: ProductsRepository) {
-        this.commentsRepository = commentsRepository
-        this.productsRepository = productsRepository
+    constructor(input: { commentsRepository: CommentsRepository; productsRepository: ProductsRepository }) {
+        this.commentsRepository = input.commentsRepository
+        this.productsRepository = input.productsRepository
     }
 
     getComments() {
-        return (req: Request<ProductIdParams>, res: Response): Response => {
+        return async (req: Request<ProductIdParams>, res: Response): Promise<Response> => {
             const { productId } = req.params
 
-            if (!this.productsRepository.getById(productId)) {
-                return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
-            }
+            const product = await this.productsRepository.getById(productId)
+            if (!product) return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
+            const comments = await this.commentsRepository.getByProductId(productId)
 
-            return res.json(this.commentsRepository.getByProductId(productId))
+            return res.json(comments)
         }
     }
 
     getCommentReplies() {
-        return (req: Request<CommentParams>, res: Response): Response => {
+        return async (req: Request<CommentParams>, res: Response): Promise<Response> => {
             const { commentId, productId } = req.params
 
-            if (!this.productsRepository.getById(productId)) {
-                return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
-            }
-
-            const comment = this.commentsRepository.findById(productId, commentId)
+            const product = await this.productsRepository.getById(productId)
+            if (!product) return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
+            const comment = await this.commentsRepository.findById({ productId, commentId })
             if (!comment) return res.status(HttpStatus.NotFound).json({ message: "Comment not found." })
 
             return res.json(comment.replies)
@@ -43,17 +41,15 @@ class CommentsController {
     }
 
     replyComment() {
-        return (req: Request<CommentParams, unknown, CommentBody>, res: Response): Response => {
+        return async (req: Request<CommentParams, unknown, CommentBody>, res: Response): Promise<Response> => {
             const { commentId, productId } = req.params
 
-            if (!this.productsRepository.getById(productId)) {
-                return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
-            }
-
-            const comment = this.commentsRepository.findById(productId, commentId)
+            const product = await this.productsRepository.getById(productId)
+            if (!product) return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
+            const comment = await this.commentsRepository.findById({ productId, commentId })
             if (!comment) return res.status(HttpStatus.NotFound).json({ message: "Comment not found." })
 
-            const reply = this.commentsRepository.addReply(comment, req.body)
+            const reply = await this.commentsRepository.addReply({ commentId, body: req.body })
             req.log.info({ productId, commentId, replyId: reply.id }, "comment reply created")
 
             return res.status(201).json(reply)
@@ -61,14 +57,13 @@ class CommentsController {
     }
 
     createComment() {
-        return (req: Request<ProductIdParams, unknown, CommentBody>, res: Response): Response => {
+        return async (req: Request<ProductIdParams, unknown, CommentBody>, res: Response): Promise<Response> => {
             const { productId } = req.params
 
-            if (!this.productsRepository.getById(productId)) {
-                return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
-            }
+            const product = await this.productsRepository.getById(productId)
+            if (!product) return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
 
-            const comment = this.commentsRepository.create(productId, req.body)
+            const comment = await this.commentsRepository.create({ productId, body: req.body })
             req.log.info({ productId, commentId: comment.id }, "comment created")
 
             return res.status(201).json(comment)

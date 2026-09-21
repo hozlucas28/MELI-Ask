@@ -1,0 +1,36 @@
+meta {
+  name: Ask product
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/:productId/ask
+  body: json
+  auth: none
+}
+
+params:path {
+  productId: 264a6a79-e6df-4da7-8c03-a8698a7272b1
+}
+
+headers {
+  Accept: text/event-stream
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "question": "How long does the battery last with noise cancellation enabled?"
+  }
+}
+
+tests {
+  test("should stream the product answer", function() {
+    expect(res.status).to.equal(200);
+  });
+}
+
+docs {
+  Uses the product owner's previous answers as retrieved context for an agentic response.
+}
