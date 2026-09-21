@@ -9,6 +9,7 @@ type ProductRagServiceDependencies = {
 }
 
 type RetrieveProductAnswers = {
+    embedding?: number[]
     productId: string
     query: string
 }
@@ -27,7 +28,7 @@ class ProductRagService {
     async retrieve(input: RetrieveProductAnswers): Promise<ProductAnswerContext[]> {
         await this.indexPendingAnswers(input.productId)
 
-        const [embedding] = await this.createEmbeddings([input.query])
+        const [embedding] = input.embedding ? [input.embedding] : await this.createEmbeddings([input.query])
 
         return this.productAnswersRepository.search({
             productId: input.productId,

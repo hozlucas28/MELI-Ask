@@ -8,9 +8,9 @@
         "#shared/*": "./src/shared/*.ts"
     },
     "scripts": {
-        "start": "node src/api.ts",
+        "start": "node --import ./src/instrument.ts src/api.ts",
         "start:frontend": "pnpm --dir frontend build",
-        "dev": "node --watch --env-file=.env src/api.ts",
+        "dev": "node --watch --env-file=.env --import ./src/instrument.ts src/api.ts",
         "dev:frontend": "pnpm --dir frontend dev",
         "test": "cd docs/bruno && bru run --tests-only --noproxy",
         "fmt": "oxfmt",
@@ -20,6 +20,7 @@
     "dependencies": {
         "@openrouter/agent": "0.11.0",
         "@openrouter/sdk": "^1.2.147",
+        "@sentry/node": "^10.75.0",
         "compression": "^1.8.2",
         "express": "^5.2.1",
         "helmet": "^8.3.0",
@@ -27,6 +28,7 @@
         "pgvector": "^0.3.0",
         "pino": "^10.3.1",
         "pino-http": "^11.0.0",
+        "redis": "^6.2.1",
         "zod": "^4.6.5"
     },
     "devDependencies": {

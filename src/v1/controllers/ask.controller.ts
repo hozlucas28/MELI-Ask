@@ -1,4 +1,5 @@
 import { HttpStatus } from "#shared/enums/http-status.enum"
+import * as Sentry from "@sentry/node"
 
 import type { Request, Response } from "express"
 import type { ProductsRepository } from "#v1/repositories/products.repository"
@@ -67,7 +68,8 @@ class AskController {
                 res.flush()
             }
             res.write("event: complete\ndata: {}\n\n")
-        } catch {
+        } catch (error) {
+            Sentry.captureException(error, { tags: { endpoint: "product.ask", responseMode: "stream" } })
             res.write(
                 `event: error\ndata: ${JSON.stringify({ message: "Unable to generate an answer at this time." })}\n\n`
             )

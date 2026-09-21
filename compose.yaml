@@ -36,12 +36,25 @@ services:
         required: true
     environment:
       DATABASE_HOST: database # Refers to the database service
+      REDIS_URL: redis://redis:6379
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl --fail --silent http://localhost:$${APP_PORT}/health || exit 1"]
       retries: 3
+      timeout: 5s
+      interval: 5s
+
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      retries: 5
       timeout: 5s
       interval: 5s
 

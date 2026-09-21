@@ -31,6 +31,11 @@ const schema = `
         embedding_model TEXT
     );
 
+    CREATE TABLE IF NOT EXISTS product_knowledge_versions (
+        product_id UUID PRIMARY KEY REFERENCES products(id) ON DELETE CASCADE,
+        generation INTEGER NOT NULL DEFAULT 0
+    );
+
     ALTER TABLE replies ADD COLUMN IF NOT EXISTS embedding halfvec(2048);
     ALTER TABLE replies ADD COLUMN IF NOT EXISTS embedding_model TEXT;
 

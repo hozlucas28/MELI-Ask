@@ -8,16 +8,23 @@ import { commentBodySchema, commentParamsSchema } from "#v1/schemas/comment.sche
 import { productIdParamsSchema } from "#v1/schemas/product.schema"
 
 import type { Pool } from "pg"
+import type { RagAnswersCache } from "#v1/repositories/rag-answers-cache.repository"
 import type { CommentBody, CommentParams } from "#v1/schemas/comment.schema"
 import type { ProductIdParams } from "#v1/schemas/product.schema"
 
-function createProductsRouter(database: Pool): Router {
+type CreateProductsRouterInput = {
+    database: Pool
+    ragAnswersCache: RagAnswersCache
+}
+
+function createProductsRouter(input: CreateProductsRouterInput): Router {
+    const { database, ragAnswersCache } = input
     // Modules
     const productsRepository = new PostgresProductsRepository(database)
     const productsController = new ProductsController(productsRepository)
 
     const commentsRepository = new PostgresCommentsRepository(database)
-    const commentsControllerInput = { commentsRepository, productsRepository }
+    const commentsControllerInput = { commentsRepository, productsRepository, ragAnswersCache }
     const commentsController = new CommentsController(commentsControllerInput)
 
     // Routes

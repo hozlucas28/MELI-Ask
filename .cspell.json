@@ -17,6 +17,7 @@
         "halfvec",
         "healthcheck",
         "hnsw",
+        "HSET",
         "isready",
         "meli",
         "milisegundo",

@@ -11,10 +11,17 @@ import { AgenticAskService } from "#v1/services/ask.service"
 import { ProductRagService } from "#v1/services/product-rag.service"
 
 import type { Pool } from "pg"
+import type { RagAnswersCache } from "#v1/repositories/rag-answers-cache.repository"
 import type { AskBody } from "#v1/schemas/ask.schema"
 import type { ProductIdParams } from "#v1/schemas/product.schema"
 
-function createAskRouter(database: Pool): Router {
+type CreateAskRouterInput = {
+    database: Pool
+    ragAnswersCache: RagAnswersCache
+}
+
+function createAskRouter(input: CreateAskRouterInput): Router {
+    const { database, ragAnswersCache } = input
     const openRouterOptions = {
         apiKey: OPENROUTER_API_KEY,
         appTitle: "MELI Ask",
@@ -30,7 +37,7 @@ function createAskRouter(database: Pool): Router {
         productAnswersRepository
     }
     const productRagService = new ProductRagService(productRagServiceDependencies)
-    const askServiceDependencies = { model: OPENROUTER_MODEL, openRouter, productRagService }
+    const askServiceDependencies = { model: OPENROUTER_MODEL, openRouter, productRagService, ragAnswersCache }
     const productQuestionAnswerer = new AgenticAskService(askServiceDependencies)
     const askControllerDependencies = { productQuestionAnswerer, productsRepository }
     const askController = new AskController(askControllerDependencies)

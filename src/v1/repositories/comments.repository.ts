@@ -14,6 +14,8 @@ type CreateComment = {
 type CreateReply = {
     body: CommentBody
     commentId: string
+    productId: string
+    updatesKnowledge: boolean
 }
 
 type CommentRow = Omit<Comment, "createdAt"> & {
@@ -98,11 +100,20 @@ class PostgresCommentsRepository implements CommentsRepository {
     async addReply(input: CreateReply): Promise<Reply> {
         const result = await this.database.query<ReplyRow>(
             `
-                INSERT INTO replies (id, comment_id, author_id, content)
-                VALUES ($1, $2, $3, $4)
-                RETURNING id, author_id AS "authorId", content, created_at AS "createdAt"
+                WITH inserted_reply AS (
+                    INSERT INTO replies (id, comment_id, author_id, content)
+                    VALUES ($1, $2, $3, $4)
+                    RETURNING id, author_id AS "authorId", content, created_at AS "createdAt"
+                ), updated_knowledge AS (
+                    INSERT INTO product_knowledge_versions (product_id, generation)
+                    SELECT $5, 1
+                    WHERE $6
+                    ON CONFLICT (product_id) DO UPDATE
+                    SET generation = product_knowledge_versions.generation + 1
+                )
+                SELECT * FROM inserted_reply
             `,
-            [crypto.randomUUID(), input.commentId, input.body.authorId, input.body.content]
+            [crypto.randomUUID(), input.commentId, input.body.authorId, input.body.content, input.productId, input.updatesKnowledge]
         )
         const reply = result.rows[0]
 

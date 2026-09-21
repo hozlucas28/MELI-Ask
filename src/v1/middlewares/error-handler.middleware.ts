@@ -1,4 +1,5 @@
 import { HttpStatus } from "#shared/enums/http-status.enum"
+import * as Sentry from "@sentry/node"
 
 import type { ErrorRequestHandler } from "express"
 
@@ -10,6 +11,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next): void => {
 
     const err = error instanceof Error ? error : new Error(String(error))
     req.log.error({ err }, "unhandled request error")
+    Sentry.captureException(err)
 
     res.status(HttpStatus.InternalServerError).json({ message: "An internal error occurred." })
 }
