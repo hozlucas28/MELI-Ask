@@ -11,6 +11,12 @@ type AskControllerDependencies = {
     productQuestionAnswerer: ProductQuestionAnswerer
 }
 
+type StreamAnswerInput = {
+    req: Request<ProductIdParams, unknown, AskBody>
+    res: Response
+    productId: string
+}
+
 class AskController {
     private readonly productsRepository: ProductsRepository
     private readonly productQuestionAnswerer: ProductQuestionAnswerer
@@ -27,7 +33,7 @@ class AskController {
             const product = await this.productsRepository.getById(productId)
             if (!product) return res.status(HttpStatus.NotFound).json({ message: "Product not found." })
 
-            if (req.accepts("text/event-stream")) return this.streamAnswer(req, res, productId)
+            if (req.accepts("text/event-stream")) return this.streamAnswer({ req, res, productId })
 
             const answer = await this.productQuestionAnswerer.ask({ productId, question: req.body.question })
 
@@ -35,14 +41,13 @@ class AskController {
         }
     }
 
-    private async streamAnswer(
-        req: Request<ProductIdParams, unknown, AskBody>,
-        res: Response,
-        productId: string
-    ): Promise<Response> {
+    private async streamAnswer(input: StreamAnswerInput): Promise<Response> {
+        const { req, res, productId } = input
         const controller = new AbortController()
         const timeout = setTimeout(() => controller.abort(new Error("the language model response timed out.")), 25_000)
-        req.once("close", () => controller.abort())
+        res.once("close", () => {
+            if (!res.writableEnded) controller.abort()
+        })
         res.status(HttpStatus.Ok).set({
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
@@ -51,6 +56,7 @@ class AskController {
         })
         res.flushHeaders()
         res.write("event: ready\ndata: {}\n\n")
+        res.flush()
 
         try {
             for await (const delta of this.productQuestionAnswerer.askStream(
@@ -58,6 +64,7 @@ class AskController {
                 controller.signal
             )) {
                 res.write(`event: answer\ndata: ${JSON.stringify({ delta })}\n\n`)
+                res.flush()
             }
             res.write("event: complete\ndata: {}\n\n")
         } catch {

@@ -1,6 +1,28 @@
 name: meli-ask
 
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: true
+    environment:
+      VITE_API_PROXY_TARGET: "http://app:${APP_PORT}"
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://localhost:$${FRONTEND_PORT}/ || exit 1"]
+      retries: 3
+      timeout: 5s
+      interval: 5s
+
   app:
     container_name: app
     build:

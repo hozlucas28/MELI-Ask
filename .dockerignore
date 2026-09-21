@@ -1,6 +1,9 @@
 *
 !src/
+!frontend/
 !package.json
 !pnpm-lock.yaml
 !pnpm-workspace.yaml
 !tsconfig.json
+frontend/node_modules/
+frontend/dist/

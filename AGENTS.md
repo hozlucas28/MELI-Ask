@@ -6,13 +6,16 @@
 - Add every developer preference, correction, decision, or convention expressed during an agent session to this file as part of the same change.
 - If a new preference conflicts with an existing rule in this file, ask the developer whether to update this file before applying the conflicting preference.
 
-## API Architecture
+## Application Architecture
 
-- This repository is an API-only project.
+- This repository contains an API at the root and a React frontend under `frontend`.
 - Keep API versions autonomous. Each version owns its routes, controllers, schemas, repositories, types, enums, and middleware under `src/<version>`.
 - Mount versioned endpoints under `/api/<version>`.
 - Use `src/shared` only for genuinely cross-version concerns, such as logging.
 - Keep application construction separate from server startup so integration tests can create isolated application instances without opening the development server port.
+- Keep frontend code self-contained under `frontend` and use React with Tailwind CSS.
+- Configure the frontend API base URL through a Vite environment variable, with a development default that targets the local API.
+- Consume the product-answer stream as server-sent events and render answer deltas incrementally.
 
 ## API and Data Rules
 
@@ -36,6 +39,7 @@
 - Keep type-only imports separate and use `import type`.
 - Use the `#src/*`, `#v1/*`, and `#shared/*` aliases for local imports instead of relative paths.
 - Use named exports only. Place value exports at the end of the module and type exports in a separate `export type { ... }` statement.
+- Framework configuration files may use a default export when the framework requires it.
 - Name repository contracts and implementations in plural form.
 - Repository implementations must be classes with explicit constructors. Initialize attribute values inside constructors, not in field declarations.
 - Controllers must be classes that depend on repository interfaces rather than concrete implementations.

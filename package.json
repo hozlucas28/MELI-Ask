@@ -9,7 +9,9 @@
     },
     "scripts": {
         "start": "node src/api.ts",
+        "start:frontend": "pnpm --dir frontend build",
         "dev": "node --watch --env-file=.env src/api.ts",
+        "dev:frontend": "pnpm --dir frontend dev",
         "test": "cd docs/bruno && bru run --tests-only --noproxy",
         "fmt": "oxfmt",
         "lint": "tsc --noEmit && oxlint --fix && zizmor --gh-token=$(gh auth token) --persona=auditor .github/workflows && github-actionlint -ignore 'unexpected key \"description\" for \"workflow\" section.' .github/workflows/*.yaml",
