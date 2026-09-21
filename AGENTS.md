@@ -21,6 +21,7 @@
 
 - The current API version exposes product, comment, and reply endpoints under `/api/v1`.
 - Persist products, comments, and replies in PostgreSQL. Initialize the schema and idempotent demo seed when the API starts.
+- Store all seeded product, comment, and reply content in Spanish; keep source code and documentation in English.
 - Run PostgreSQL through `compose.yaml` without persistent volumes; this repository is a demonstration rather than a production deployment.
 - Give every product a UUID owner identifier. Only replies authored by that product owner are eligible for the product knowledge base.
 - Use pgvector to embed owner question-and-answer pairs and keep retrieval isolated by product.
